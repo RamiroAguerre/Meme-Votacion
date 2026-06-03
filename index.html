@@ -181,6 +181,27 @@
       background: linear-gradient(135deg, #ffbe0b, #fb5607);
     }
 
+    .final-meme {
+      display: none;
+      width: 100%;
+      max-width: 520px;
+      margin: 18px auto 0;
+      padding: 16px;
+      border-radius: 28px;
+      background: rgba(0,0,0,.48);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.22);
+      box-shadow: 0 18px 45px rgba(0,0,0,.38);
+      animation: resultPop .5s ease-out;
+    }
+
+    .final-meme img {
+      width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      border-radius: 20px;
+    }
+
     .footer {
       margin-top: 26px;
       font-size: 14px;
@@ -271,39 +292,24 @@
       }
     }
 
-    .hidden-after-vote {
-      display: none;
-    }
-
     @media (max-width: 760px) {
       body {
         align-items: flex-start;
         padding: 18px;
       }
-      
-      .result {
-        margin-top: 14px;
-        padding: 20px 18px;
-        border-radius: 24px;
+
+      h1 {
+        font-size: clamp(42px, 12vw, 58px);
       }
-      
-      .result h2 {
-        font-size: 30px;
-        margin-bottom: 10px;
+
+      .subtitle {
+        margin-bottom: 24px;
       }
-      
-      .result p {
-        font-size: 17px;
-        margin-bottom: 8px;
-      }
-      
-      .winner-label {
-        margin-top: 10px;
-        padding: 10px 14px;
-        font-size: 17px;
-      }
+
       .cards {
         grid-template-columns: 1fr;
+        gap: 18px;
+        margin-bottom: 20px;
       }
 
       .card {
@@ -317,6 +323,44 @@
 
       .card p {
         font-size: 17px;
+      }
+
+      .result {
+        margin-top: 14px;
+        padding: 20px 18px;
+        border-radius: 24px;
+      }
+
+      .result h2 {
+        font-size: 30px;
+        margin-bottom: 10px;
+      }
+
+      .result p {
+        font-size: 17px;
+        margin-bottom: 8px;
+      }
+
+      .winner-label {
+        margin-top: 10px;
+        padding: 10px 14px;
+        font-size: 17px;
+      }
+
+      .final-meme {
+        max-width: 100%;
+        margin-top: 14px;
+        padding: 12px;
+        border-radius: 22px;
+      }
+
+      .final-meme img {
+        max-height: 170px;
+      }
+
+      .footer {
+        margin-top: 18px;
+        padding-bottom: 16px;
       }
 
       .meme-gif {
@@ -386,16 +430,20 @@
       <div class="winner-label" id="winnerLabel"></div>
     </section>
 
+    <div class="final-meme" id="finalMeme">
+      <img id="finalMemeImg" src="" alt="meme final de festejo" />
+    </div>
+
     <div class="footer">
       Si esto define el viaje, la democracia funcionó perfecto. Más o menos.
     </div>
   </main>
 
   <div class="meme-party" id="memeParty">
-    <img src="./dog-dance.gif?v=10" class="meme-gif meme-1" alt="perrito bailando" />
-    <img src="./cat-dance.gif?v=10" class="meme-gif meme-2" alt="gato bailando" />
-    <img src="./cat-spin.gif?v=10" class="meme-gif meme-3" alt="gato girando" />
-    <img src="./dog-standing.gif?v=10" class="meme-gif meme-4" alt="perrito festejando" />
+    <img src="./dog-dance.gif?v=30" class="meme-gif meme-1" alt="perrito bailando" />
+    <img src="./cat-dance.gif?v=30" class="meme-gif meme-2" alt="gato bailando" />
+    <img src="./cat-spin.gif?v=30" class="meme-gif meme-3" alt="gato girando" />
+    <img src="./dog-standing.gif?v=30" class="meme-gif meme-4" alt="perrito festejando" />
   </div>
 
   <script>
@@ -409,8 +457,11 @@
       const winnerLabel = document.getElementById("winnerLabel");
       const cardJamaica = document.getElementById("cardJamaica");
       const cardMexico = document.getElementById("cardMexico");
+      const finalMeme = document.getElementById("finalMeme");
+      const finalMemeImg = document.getElementById("finalMemeImg");
 
       result.style.display = "block";
+      finalMeme.style.display = "block";
 
       if (destination === "Jamaica") {
         mainTitle.innerText = "Ganó Jamaica 🇯🇲🔥";
@@ -423,6 +474,8 @@
 
         winnerLabel.innerText = "Destino elegido: Jamaica 🇯🇲";
         winnerLabel.classList.remove("mexico-win");
+
+        finalMemeImg.src = "./dancing-cat-25.gif?v=30";
 
         cardJamaica.classList.add("selected");
         cardMexico.classList.add("not-selected");
@@ -437,6 +490,8 @@
 
         winnerLabel.innerText = "Destino elegido: México 🇲🇽";
         winnerLabel.classList.add("mexico-win");
+
+        finalMemeImg.src = "./mexico-cat-dance.gif?v=30";
 
         cardMexico.classList.add("selected");
         cardJamaica.classList.add("not-selected");
