@@ -1,1 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jamaica vs México</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background:
+        linear-gradient(rgba(0,0,0,.62), rgba(0,0,0,.88)),
+        url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80");
+      background-size: cover;
+      background-position: center;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 22px;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1050px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+      backdrop-filter: blur(8px);
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    h1 {
+      font-size: clamp(36px, 8vw, 78px);
+      line-height: 1;
+      margin-bottom: 16px;
+      text-shadow: 0 8px 30px rgba(0,0,0,.6);
+    }
+
+    .subtitle {
+      font-size: clamp(17px, 3vw, 26px);
+      color: #e9fdfb;
+      margin-bottom: 32px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .card {
+      border-radius: 28px;
+      padding: 28px;
+      min-height: 330px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.25);
+      box-shadow: 0 20px 50px rgba(0,0,0,.35);
+      transition: transform .25s, box-shadow .25s;
+    }
+
+    .card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 30px 70px rgba(0,0,0,.5);
+    }
+
+    .emoji {
+      font-size: 58px;
+      margin-bottom: 12px;
+    }
+
+    .card h2 {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      font-size: 18px;
+      color: #f2f2f2;
+      margin-bottom: 22px;
+    }
+
+    button {
+      border: none;
+      border-radius: 18px;
+      padding: 16px 22px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #111;
+      background: linear-gradient(135deg, #00f5d4, #fee440);
+      transition: transform .2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .mexico button {
+      background: linear-gradient(135deg, #ffbe0b, #fb5607);
+    }
+
+    .result {
+      display: none;
+      margin-top: 30px;
+      padding: 26px;
+      border-radius: 28px;
+      background: rgba(0,0,0,.58);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.22);
+    }
+
+    .result h2 {
+      font-size: clamp(28px, 5vw, 54px);
+      margin-bottom: 12px;
+    }
+
+    .result p {
+      font-size: 20px;
+      margin-bottom: 18px;
+    }
+
+    .counter {
+      margin-top: 12px;
+      font-size: 18px;
+      opacity: .9;
+    }
+
+    .footer {
+      margin-top: 26px;
+      font-size: 14px;
+      opacity: .75;
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      top: -10px;
+      animation: fall 3s linear forwards;
+      z-index: 999;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    .meme-party {
+      display: none;
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 998;
+    }
+
+    .meme-gif {
+      position: absolute;
+      width: clamp(85px, 18vw, 185px);
+      animation: memePop 3s ease-in-out forwards;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,.65));
+    }
+
+    .meme-1 {
+      bottom: 4%;
+      left: 5%;
+    }
+
+    .meme-2 {
+      bottom: 5%;
+      right: 6%;
+    }
+
+    .meme-3 {
+      top: 15%;
+      right: 8%;
+    }
+
+    .meme-4 {
+      top: 17%;
+      left: 7%;
+    }
+
+    @keyframes memePop {
+      0% {
+        opacity: 0;
+        transform: scale(.4) rotate(-10deg);
+      }
+
+      20% {
+        opacity: 1;
+        transform: scale(1.1) rotate(5deg);
+      }
+
+      75% {
+        opacity: 1;
+        transform: scale(1) rotate(-3deg);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(.8) rotate(8deg);
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        align-items: flex-start;
+        padding: 18px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        min-height: 270px;
+        padding: 24px;
+      }
+
+      .card h2 {
+        font-size: 31px;
+      }
+
+      .card p {
+        font-size: 17px;
+      }
+
+      .meme-3 {
+        top: 8%;
+        right: 3%;
+      }
+
+      .meme-4 {
+        top: 9%;
+        left: 3%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <div class="badge">Votación oficialísima, cero seria y 100% importante 🍹</div>
+
+    <h1>¿Jamaica o México?</h1>
+
+    <p class="subtitle">
+      Bueno che… al final, ¿queremos aventura y reggae o relax premium con cenotes?
+    </p>
+
+    <section class="cards">
+      <div class="card jamaica">
+        <div>
+          <div class="emoji">🇯🇲🌴</div>
+          <h2>Jamaica</h2>
+          <p>
+            Selva, cascadas, reggae, Blue Hole y sentirte en Jurassic Park pero con ojotas.
+          </p>
+        </div>
+        <button onclick="vote('Jamaica')">Votar Jamaica 🔥</button>
+      </div>
+
+      <div class="card mexico">
+        <div>
+          <div class="emoji">🇲🇽🏝️</div>
+          <h2>México</h2>
+          <p>
+            Cenotes, Bacalar, Holbox, resorts y entrar en modo NPC feliz con traguito en mano.
+          </p>
+        </div>
+        <button onclick="vote('México')">Votar México 😎</button>
+      </div>
+    </section>
+
+    <section class="result" id="result">
+      <h2 id="resultTitle"></h2>
+      <p id="resultText"></p>
+      <div class="counter" id="counter"></div>
+    </section>
+
+    <div class="footer">
+      Si esto define el viaje, la democracia funcionó perfecto. Más o menos.
+    </div>
+  </main>
+
+  <div class="meme-party" id="memeParty">
+    <img src="dog-dance.gif" class="meme-gif meme-1" alt="perrito bailando" />
+    <img src="cat-dance.gif" class="meme-gif meme-2" alt="gato bailando" />
+    <img src="cat-spin.gif" class="meme-gif meme-3" alt="gato girando" />
+    <img src="dog-standing.gif" class="meme-gif meme-4" alt="perrito festejando" />
+  </div>
+
+  <script>
+    let votes = JSON.parse(localStorage.getItem("votes")) || {
+      Jamaica: 0,
+      México: 0
+    };
+
+    function vote(destination) {
+      votes[destination]++;
+      localStorage.setItem("votes", JSON.stringify(votes));
+
+      document.getElementById("result").style.display = "block";
+      document.getElementById("resultTitle").innerText =
+        "Voto registrado papáaaa 🎉";
+
+      if (destination === "Jamaica") {
+        document.getElementById("resultText").innerText =
+          "Elegiste Jamaica: selva, reggae y cero ganas de volver. Excelente decisión tropical.";
+      } else {
+        document.getElementById("resultText").innerText =
+          "Elegiste México: lujo, cenotes y felicidad all inclusive. Se respeta fuerte.";
+      }
+
+      document.getElementById("counter").innerText =
+        "Resultado en este dispositivo: Jamaica " + votes.Jamaica + " | México " + votes.México;
+
+      launchConfetti();
+      launchMemeParty();
+
+      setTimeout(() => {
+        document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+      }, 250);
+    }
+
+    function launchConfetti() {
+      const colors = ["#00f5d4", "#fee440", "#ff006e", "#fb5607", "#ffffff"];
+
+      for (let i = 0; i < 90; i++) {
+        const confetti = document.createElement("div");
+        confetti.className = "confetti";
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.backgroundColor =
+          colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + "s";
+        confetti.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+        document.body.appendChild(confetti);
+
+        setTimeout(() => {
+          confetti.remove();
+        }, 4200);
+      }
+    }
+
+    function launchMemeParty() {
+      const memeParty = document.getElementById("memeParty");
+      memeParty.style.display = "block";
+
+      setTimeout(() => {
+        memeParty.style.display = "none";
+      }, 3100);
+    }
+  </script>
+</body>
+</html>
