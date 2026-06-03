@@ -280,7 +280,28 @@
         align-items: flex-start;
         padding: 18px;
       }
-
+      
+      .result {
+        margin-top: 14px;
+        padding: 20px 18px;
+        border-radius: 24px;
+      }
+      
+      .result h2 {
+        font-size: 30px;
+        margin-bottom: 10px;
+      }
+      
+      .result p {
+        font-size: 17px;
+        margin-bottom: 8px;
+      }
+      
+      .winner-label {
+        margin-top: 10px;
+        padding: 10px 14px;
+        font-size: 17px;
+      }
       .cards {
         grid-template-columns: 1fr;
       }
@@ -451,7 +472,7 @@
         confetti.style.height = size + "px";
         confetti.style.backgroundColor =
           colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.animationDuration = (Math.random() * 3 + 3) + "s";
+        confetti.style.animationDuration = (Math.random() * 5 + 6) + "s";
         confetti.style.animationDelay = Math.random() * 0.5 + "s";
         confetti.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
 
