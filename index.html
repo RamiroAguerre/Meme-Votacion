@@ -30,8 +30,10 @@
 
     .container {
       width: 100%;
-      max-width: 1050px;
+      max-width: 1080px;
       text-align: center;
+      position: relative;
+      z-index: 2;
     }
 
     .badge {
@@ -61,6 +63,7 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 22px;
+      margin-bottom: 28px;
     }
 
     .card {
@@ -74,12 +77,23 @@
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,.25);
       box-shadow: 0 20px 50px rgba(0,0,0,.35);
-      transition: transform .25s, box-shadow .25s;
+      transition: transform .25s, box-shadow .25s, opacity .25s;
     }
 
     .card:hover {
       transform: translateY(-8px) scale(1.02);
       box-shadow: 0 30px 70px rgba(0,0,0,.5);
+    }
+
+    .card.selected {
+      border: 3px solid #fff;
+      box-shadow: 0 0 35px rgba(255,255,255,.55);
+      transform: scale(1.03);
+    }
+
+    .card.not-selected {
+      opacity: .45;
+      filter: grayscale(.5);
     }
 
     .emoji {
@@ -120,28 +134,51 @@
 
     .result {
       display: none;
-      margin-top: 30px;
-      padding: 26px;
-      border-radius: 28px;
-      background: rgba(0,0,0,.58);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,.22);
+      margin-top: 24px;
+      padding: 30px;
+      border-radius: 30px;
+      background: rgba(0,0,0,.68);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.28);
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      animation: resultPop .5s ease-out;
+    }
+
+    @keyframes resultPop {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
     .result h2 {
-      font-size: clamp(28px, 5vw, 54px);
-      margin-bottom: 12px;
+      font-size: clamp(30px, 5vw, 58px);
+      margin-bottom: 14px;
     }
 
     .result p {
-      font-size: 20px;
-      margin-bottom: 18px;
+      font-size: clamp(18px, 2.3vw, 24px);
+      margin-bottom: 10px;
+      line-height: 1.35;
     }
 
-    .counter {
-      margin-top: 12px;
-      font-size: 18px;
-      opacity: .9;
+    .winner-label {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: bold;
+      background: linear-gradient(135deg, #00f5d4, #fee440);
+      color: #111;
+    }
+
+    .winner-label.mexico-win {
+      background: linear-gradient(135deg, #ffbe0b, #fb5607);
     }
 
     .footer {
@@ -152,16 +189,19 @@
 
     .confetti {
       position: fixed;
-      width: 10px;
-      height: 10px;
-      top: -10px;
-      animation: fall 3s linear forwards;
+      top: -20px;
+      animation: fall linear forwards;
       z-index: 999;
+      pointer-events: none;
     }
 
     @keyframes fall {
-      to {
-        transform: translateY(110vh) rotate(720deg);
+      0% {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(115vh) rotate(900deg);
         opacity: 0;
       }
     }
@@ -176,51 +216,63 @@
 
     .meme-gif {
       position: absolute;
-      width: clamp(85px, 18vw, 185px);
-      animation: memePop 3s ease-in-out forwards;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,.65));
+      width: clamp(110px, 18vw, 230px);
+      filter: drop-shadow(0 12px 22px rgba(0,0,0,.75));
+      animation: memePop 5s ease-in-out forwards;
     }
 
     .meme-1 {
-      bottom: 4%;
-      left: 5%;
+      bottom: 5%;
+      left: 4%;
     }
 
     .meme-2 {
       bottom: 5%;
-      right: 6%;
+      right: 5%;
     }
 
     .meme-3 {
-      top: 15%;
-      right: 8%;
+      top: 12%;
+      right: 5%;
     }
 
     .meme-4 {
-      top: 17%;
-      left: 7%;
+      top: 13%;
+      left: 4%;
     }
 
     @keyframes memePop {
       0% {
         opacity: 0;
-        transform: scale(.4) rotate(-10deg);
+        transform: scale(.3) rotate(-12deg);
       }
 
-      20% {
+      12% {
         opacity: 1;
-        transform: scale(1.1) rotate(5deg);
+        transform: scale(1.15) rotate(6deg);
       }
 
-      75% {
+      30% {
+        transform: scale(1) rotate(-4deg);
+      }
+
+      55% {
+        transform: scale(1.12) rotate(5deg);
+      }
+
+      78% {
         opacity: 1;
         transform: scale(1) rotate(-3deg);
       }
 
       100% {
         opacity: 0;
-        transform: scale(.8) rotate(8deg);
+        transform: scale(.75) rotate(10deg);
       }
+    }
+
+    .hidden-after-vote {
+      display: none;
     }
 
     @media (max-width: 760px) {
@@ -234,7 +286,7 @@
       }
 
       .card {
-        min-height: 270px;
+        min-height: 260px;
         padding: 24px;
       }
 
@@ -246,14 +298,28 @@
         font-size: 17px;
       }
 
+      .meme-gif {
+        width: clamp(85px, 28vw, 150px);
+      }
+
+      .meme-1 {
+        bottom: 3%;
+        left: 2%;
+      }
+
+      .meme-2 {
+        bottom: 3%;
+        right: 2%;
+      }
+
       .meme-3 {
-        top: 8%;
-        right: 3%;
+        top: 7%;
+        right: 2%;
       }
 
       .meme-4 {
-        top: 9%;
-        left: 3%;
+        top: 7%;
+        left: 2%;
       }
     }
   </style>
@@ -261,16 +327,16 @@
 
 <body>
   <main class="container">
-    <div class="badge">Votación oficialísima, cero seria y 100% importante 🍹</div>
+    <div class="badge" id="badge">Votación oficialísima, cero seria y 100% importante 🍹</div>
 
-    <h1>¿Jamaica o México?</h1>
+    <h1 id="mainTitle">¿Jamaica o México?</h1>
 
-    <p class="subtitle">
+    <p class="subtitle" id="subtitle">
       Bueno che… al final, ¿queremos aventura y reggae o relax premium con cenotes?
     </p>
 
-    <section class="cards">
-      <div class="card jamaica">
+    <section class="cards" id="cards">
+      <div class="card jamaica" id="cardJamaica">
         <div>
           <div class="emoji">🇯🇲🌴</div>
           <h2>Jamaica</h2>
@@ -281,7 +347,7 @@
         <button onclick="vote('Jamaica')">Votar Jamaica 🔥</button>
       </div>
 
-      <div class="card mexico">
+      <div class="card mexico" id="cardMexico">
         <div>
           <div class="emoji">🇲🇽🏝️</div>
           <h2>México</h2>
@@ -296,7 +362,7 @@
     <section class="result" id="result">
       <h2 id="resultTitle"></h2>
       <p id="resultText"></p>
-      <div class="counter" id="counter"></div>
+      <div class="winner-label" id="winnerLabel"></div>
     </section>
 
     <div class="footer">
@@ -305,71 +371,108 @@
   </main>
 
   <div class="meme-party" id="memeParty">
-    <img src="dog-dance.gif" class="meme-gif meme-1" alt="perrito bailando" />
-    <img src="cat-dance.gif" class="meme-gif meme-2" alt="gato bailando" />
-    <img src="cat-spin.gif" class="meme-gif meme-3" alt="gato girando" />
-    <img src="dog-standing.gif" class="meme-gif meme-4" alt="perrito festejando" />
+    <img src="./dog-dance.gif?v=10" class="meme-gif meme-1" alt="perrito bailando" />
+    <img src="./cat-dance.gif?v=10" class="meme-gif meme-2" alt="gato bailando" />
+    <img src="./cat-spin.gif?v=10" class="meme-gif meme-3" alt="gato girando" />
+    <img src="./dog-standing.gif?v=10" class="meme-gif meme-4" alt="perrito festejando" />
   </div>
 
   <script>
-    let votes = JSON.parse(localStorage.getItem("votes")) || {
-      Jamaica: 0,
-      México: 0
-    };
-
     function vote(destination) {
-      votes[destination]++;
-      localStorage.setItem("votes", JSON.stringify(votes));
+      const mainTitle = document.getElementById("mainTitle");
+      const subtitle = document.getElementById("subtitle");
+      const badge = document.getElementById("badge");
+      const result = document.getElementById("result");
+      const resultTitle = document.getElementById("resultTitle");
+      const resultText = document.getElementById("resultText");
+      const winnerLabel = document.getElementById("winnerLabel");
+      const cardJamaica = document.getElementById("cardJamaica");
+      const cardMexico = document.getElementById("cardMexico");
 
-      document.getElementById("result").style.display = "block";
-      document.getElementById("resultTitle").innerText =
-        "Voto registrado papáaaa 🎉";
+      result.style.display = "block";
 
       if (destination === "Jamaica") {
-        document.getElementById("resultText").innerText =
-          "Elegiste Jamaica: selva, reggae y cero ganas de volver. Excelente decisión tropical.";
-      } else {
-        document.getElementById("resultText").innerText =
-          "Elegiste México: lujo, cenotes y felicidad all inclusive. Se respeta fuerte.";
-      }
+        mainTitle.innerText = "Ganó Jamaica 🇯🇲🔥";
+        subtitle.innerText = "Aventura, reggae, cascadas y modo Jurassic Park activado.";
+        badge.innerText = "La democracia habló, señores 🌴";
 
-      document.getElementById("counter").innerText =
-        "Resultado en este dispositivo: Jamaica " + votes.Jamaica + " | México " + votes.México;
+        resultTitle.innerText = "Voto registrado papáaaa 🎉";
+        resultText.innerText =
+          "Elegiste Jamaica: selva, reggae y cero ganas de volver. Excelente decisión tropical.";
+
+        winnerLabel.innerText = "Destino elegido: Jamaica 🇯🇲";
+        winnerLabel.classList.remove("mexico-win");
+
+        cardJamaica.classList.add("selected");
+        cardMexico.classList.add("not-selected");
+      } else {
+        mainTitle.innerText = "Ganó México 🇲🇽😎";
+        subtitle.innerText = "Cenotes, Bacalar, Holbox y modo all inclusive premium activado.";
+        badge.innerText = "La democracia habló, señores 🏝️";
+
+        resultTitle.innerText = "Voto registrado papáaaa 🎉";
+        resultText.innerText =
+          "Elegiste México: lujo, cenotes y felicidad all inclusive. Se respeta fuerte.";
+
+        winnerLabel.innerText = "Destino elegido: México 🇲🇽";
+        winnerLabel.classList.add("mexico-win");
+
+        cardMexico.classList.add("selected");
+        cardJamaica.classList.add("not-selected");
+      }
 
       launchConfetti();
       launchMemeParty();
 
       setTimeout(() => {
-        document.getElementById("result").scrollIntoView({ behavior: "smooth" });
-      }, 250);
+        result.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 300);
     }
 
     function launchConfetti() {
-      const colors = ["#00f5d4", "#fee440", "#ff006e", "#fb5607", "#ffffff"];
+      const colors = [
+        "#00f5d4",
+        "#fee440",
+        "#ff006e",
+        "#fb5607",
+        "#ffffff",
+        "#70e000",
+        "#3a86ff"
+      ];
 
-      for (let i = 0; i < 90; i++) {
+      for (let i = 0; i < 220; i++) {
         const confetti = document.createElement("div");
         confetti.className = "confetti";
+
+        const size = Math.random() * 10 + 6;
+
         confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.width = size + "px";
+        confetti.style.height = size + "px";
         confetti.style.backgroundColor =
           colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.animationDuration = (Math.random() * 2 + 2) + "s";
-        confetti.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+        confetti.style.animationDuration = (Math.random() * 3 + 3) + "s";
+        confetti.style.animationDelay = Math.random() * 0.5 + "s";
+        confetti.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+
         document.body.appendChild(confetti);
 
         setTimeout(() => {
           confetti.remove();
-        }, 4200);
+        }, 7000);
       }
     }
 
     function launchMemeParty() {
       const memeParty = document.getElementById("memeParty");
+
+      memeParty.style.display = "none";
+      void memeParty.offsetWidth;
       memeParty.style.display = "block";
 
       setTimeout(() => {
         memeParty.style.display = "none";
-      }, 3100);
+      }, 5200);
     }
   </script>
 </body>
